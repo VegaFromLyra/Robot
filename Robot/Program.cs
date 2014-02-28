@@ -17,7 +17,9 @@ namespace Robot
         {
             int x = 3, y = 2;
 
-            Console.WriteLine("Num of possible paths for robot to go from 0,0 to {0},{1} is {2}", x, y, GetNumWays(x, y));
+            Console.WriteLine("Test case 1: Num of possible paths for robot to go from 0,0 to {0},{1} is {2}", x, y, GetNumWays(x, y));
+
+            Console.WriteLine("Test case 2: Num of possible paths for robot to go from 0,0 to {0}, {1} is {2}", y, x, GetNumWaysEasier(x, y));
 
             // Follow up
             Dictionary<Point, bool> cache = new Dictionary<Point, bool>();
@@ -58,6 +60,28 @@ namespace Robot
            }
 
            return num * Factorial(num - 1);
+        }
+
+        // Easier way of finding number of ways to get from top left 
+        // of a matrix to bottom right
+        // NOTE: x is column and y is row and they are 0 indexed
+
+        // This solution is by tracking path backwards from 
+        // the point (y , x) back to (0, 0)
+        static int GetNumWaysEasier(int x, int y)
+        {
+            // If you have reached the first row or the 
+            // first column then only one way to get back 
+            // to origin
+            if (y == 0 || x == 0)
+            {
+                return 1;
+            }
+
+            // Otherwise the result is the sum of the number of ways 
+            // to get to one cell of the left and to one cell to the top
+            // since the only allowed movements are right and down
+            return GetNumWaysEasier(x, y - 1) + GetNumWaysEasier(x - 1, y);
         }
 
 
