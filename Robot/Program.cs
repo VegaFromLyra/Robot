@@ -36,6 +36,9 @@ namespace Robot
                     Console.WriteLine("{0}, {1}", p.x, p.y);
                 }
             }
+
+            // Find all possible paths to get from (0, 0) to (y,x) a.k.a (m,n) a.k.a top left to botton right
+            PrintAllPaths(y, x);
         }
 
         // There are total X + Y steps
@@ -163,6 +166,68 @@ namespace Robot
 
            return success;
         }
+
+        // Find all possible paths from (0, 0) to (m,n)
+        static void PrintAllPaths(int row, int col, Point[] path, int m, int n, int level)
+        {
+            if (row == m - 1)
+            {
+                // Add points to path
+                for (int i = col, counter = level; i < n; i++, level++)
+                {
+                    path[counter] = new Point(row, i);
+                    counter++;
+                }
+
+                // Then print path
+                foreach (var point in path)
+                {
+                    if (point != null)
+                    {
+                        Console.Write(point.ToString() + " ");
+                    }
+                }
+            }
+            else if (col == n - 1)
+            {
+                for (int i = row, counter = level; i < m; i++, level++)
+                {
+                    path[counter] = new Point(i, col);
+                    counter++;
+                }
+
+                // Then print path
+                foreach (var point in path)
+                {
+                    if (point != null)
+                    {
+                        Console.Write(point.ToString() + " ");
+                    }
+                }
+            }
+            else
+            {
+                Point point = new Point(row, col);
+
+                path[level] = point;
+
+
+                PrintAllPaths(row + 1, col, path, m, n, level + 1);
+                Console.WriteLine();
+
+                PrintAllPaths(row, col + 1, path, m, n, level + 1);
+                Console.WriteLine();
+            }
+        }
+
+        static void PrintAllPaths(int m, int n)
+        {
+            Point[] path = new Point[m + n];
+            PrintAllPaths(0, 0, path, m, n, 0);
+        }
+
+
+
     }
 
     class Point
@@ -176,5 +241,10 @@ namespace Robot
         public int x { private set; get; }
 
         public int y { private set; get; }
+
+        public override string ToString()
+        {
+            return String.Format("({0}, {1})", x, y);
+        }
     }
 }
